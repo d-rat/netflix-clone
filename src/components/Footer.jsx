@@ -13,7 +13,7 @@ function Footer() {
   return (
     <StyledFooter>
       <h2>Netflix India</h2>
-      <h3>Made with Love by Dilip</h3>
+      <h3>Made by Dilip Singh Dangwal</h3>
       <h3>Contact me at dilipsinghdangwal@gmail.com</h3>
     </StyledFooter>
   );
