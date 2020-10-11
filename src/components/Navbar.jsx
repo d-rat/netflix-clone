@@ -26,7 +26,7 @@ function Navbar(){
 
 
   return <StyledNavbar className="show-navbar">
-  <img  classname="logo" src={Netflix} alt="Netflix" />
+  <img  className="logo" src={Netflix} alt="Netflix" />
   <div className="users"><img src={Users} alt="Users" /></div>
   </StyledNavbar>;
 }

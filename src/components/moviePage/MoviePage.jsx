@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
  import { instance } from "../../requests";
  import styled from 'styled-components';
+ import YouTube from 'react-youtube';
+ import movieTrailer from "movie-trailer";
 
  const Base = "https://image.tmdb.org/t/p/original";
 
  const StyledMoviePage=styled.div`
-
  height:100vh;
- width:100vw;
+ width:100%;
  object-fit: cover;
  background-size: cover;
  background-position: top center;
@@ -25,7 +26,6 @@ import React, { useEffect, useState } from 'react';
   width: 240px;
   margin-right:2rem;
  }
- 
  & p{
      width:60%;
  }
@@ -54,14 +54,12 @@ import React, { useEffect, useState } from 'react';
 }
 @media (max-width:768px){
     .container {
-        
     height:100%;
  width:100%;
  display:block;
  align-items:center;
  padding-top:2rem;
  padding-left:15%;
- 
  }
   & img{
       margin-left:15%;
@@ -69,7 +67,16 @@ import React, { useEffect, useState } from 'react';
   }
  `
 
+const opts={
+  height:"400",
+  width:"100%",
+  playerVars:{
+    autoplay: 1,
+  },
+};
+
 function MoviePage({match}) {
+  const [trailerUrl,setTrailerUrl]=useState('');
 
     const [movie, setMovie] = useState({});
     useEffect(() => {
@@ -80,22 +87,33 @@ function MoviePage({match}) {
       fetchMovie();
     }, [match.params.id]);
 
+    const handleClick=(movie)=>{
+if(trailerUrl){
+  setTrailerUrl("");
+} else {
+  movieTrailer(movie?.title || "").then(url => {
+    console.log(url,"dilip");
+    const urlParams =new URLSearchParams(new URL(url).search);
+    setTrailerUrl(urlParams.get('v'));
+  }).catch(error => console.log(error));
+}
+    };
+
     return (
-   
-        <StyledMoviePage style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.9)),url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`}}>
-         
+        <><StyledMoviePage style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.9)),url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`}}>
           <div className="container"> <img src={`${Base}${movie.poster_path}`} alt={movie.title}/>
            <div>
            <h1> {movie.title}</h1>
            <div className="btn-grp">
-    <button className="hero-button">Play</button>
+    <button onClick={() => {handleClick(movie)}} className="hero-button">Play</button>
     <button className="hero-button">My List</button>
   </div>
             <p>{movie.overview}</p>
             </div>
             </div>
         </StyledMoviePage>
-        
+        {trailerUrl && <YouTube videoId={trailerUrl} opts={opts}/>}
+        </>
     );
 }
 

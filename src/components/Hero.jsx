@@ -2,6 +2,15 @@ import React, { useState, useEffect } from "react";
 import { instance } from "../requests";
 
 import styled from 'styled-components';
+import YouTube from 'react-youtube';
+ import movieTrailer from "movie-trailer";
+ const opts={
+  height:"400",
+  width:"100%",
+  playerVars:{
+    autoplay: 1,
+  },
+};
 
 const StyledHero=styled.div`
   width: "100%";
@@ -54,6 +63,7 @@ const StyledHero=styled.div`
   `
 
 function Hero() {
+  const [trailerUrl,setTrailerUrl]=useState('');
 
   const [movie, setMovie] = useState("");
   useEffect(() => {
@@ -69,18 +79,32 @@ function Hero() {
     fetchdata();
   }, []);
 
-  return <StyledHero style={{backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
+  const handleClick=(movie)=>{
+    if(trailerUrl){
+      setTrailerUrl("");
+    } else {
+      movieTrailer(movie?.title || "").then(url => {
+        console.log(url,"dilip");
+        const urlParams =new URLSearchParams(new URL(url).search);
+        setTrailerUrl(urlParams.get('v'));
+      }).catch(error => console.log(error));
+    }
+        };
+
+  return <><StyledHero style={{backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
   }}>
     <h1>{movie.title}</h1>
   
     <div>
-    <button className="hero-button">Play</button>
+    <button  onClick={() => {handleClick(movie)}}  className="hero-button">Play</button>
     <button className="hero-button">My List</button>
   </div>
   <p>
     {movie.overview}
   </p>
-  </StyledHero>;
+  </StyledHero>
+  {trailerUrl && <YouTube videoId={trailerUrl} opts={opts}/>}
+  </>;
 }
 
 export default Hero;
