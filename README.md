@@ -1,4 +1,5 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+you can check the working demo [here](https://netflix-clone-bydilip.netlify.app/).
 
 ## Available Scripts
 
