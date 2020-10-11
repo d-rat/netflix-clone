@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Netflix from "../images/Netflix_Logo_RGB.png";
 import Users from "../images/users.png";
 import styled from 'styled-components';
